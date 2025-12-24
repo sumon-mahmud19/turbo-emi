@@ -4,7 +4,7 @@
 
             <!-- Left: Brand / Logo -->
             <div class="flex-shrink-0 flex items-center">
-                <a href="{{ route('dashboard') }}" class="text-xl font-bold text-primary">MyAdmin</a>
+                <a href="{{ route('dashboard') }}" class="text-xl font-bold text-primary">Emi-System</a>
             </div>
 
             <!-- Center: Desktop Links -->
