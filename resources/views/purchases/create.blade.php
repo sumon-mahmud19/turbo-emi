@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="container">
-        <h2 class="mb-4">নতুন ক্রয় যুক্ত করুন...</h2>
+        <h2 class="mb-4">নতুন ক্রয় যুক্ত করুন..</h2>
 
         @if ($errors->any())
             <div class="alert alert-danger">
