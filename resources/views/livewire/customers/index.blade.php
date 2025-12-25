@@ -109,7 +109,7 @@
         <table class="table table-zebra w-full">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>#id</th>
                     <th>Name</th>
                     <th>Customer ID</th>
                     <th>Phone</th>
