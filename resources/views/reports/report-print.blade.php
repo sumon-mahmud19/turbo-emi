@@ -125,7 +125,7 @@
 
                     <tr>
                         <td>{{ $count++ }}</td>
-                        <td colspan="2">{{ $purchase->product->product_name }}</td>
+                        <td colspan="2">{{ $purchase->product->product_name ? 'N/A' }}</td>
                         <td>{{ number_format($totalPrice, 2) }} ৳</td>
                         <td>{{ number_format($totalEmiPrice, 2) }} ৳</td>
                         <td>{{ $purchase->created_at->format('d-m-Y') }}</td>
