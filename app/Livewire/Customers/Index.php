@@ -141,7 +141,7 @@ class Index extends Component
 
         // ✅ Order + paginate
         $customers = $customersQuery
-            ->latest('customer_id')
+            ->latest('id')
             ->paginate($this->perPage);
 
         return view('livewire.customers.index', [
