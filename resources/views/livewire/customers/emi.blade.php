@@ -58,7 +58,7 @@
                         @endphp
                         <tr>
                             <td>{{ \Carbon\Carbon::parse($purchase->created_at)->format('d-m-Y') }}</td>
-                            <td>{{ $product->product_name }}</td>
+                            <td>{{ $product?->product_name ?? 'N/A' }}</td>
                             <td>{{ number_format($totalPrice, 2) }} ৳</td>
                             <td>{{ number_format($totalDeposit, 2) }} ৳</td>
                             <td>

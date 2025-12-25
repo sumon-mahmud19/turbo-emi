@@ -29,6 +29,13 @@ Route::get('/', function () {
 });
 
 
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/login'); // Redirect after logout
+});
+
 // routes/web.php
 Route::get('/locations', LocationsIndex::class)
     ->name('locations.index');
