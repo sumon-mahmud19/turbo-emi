@@ -7,7 +7,7 @@
         </div>
     @endif
 
-    
+
     {{-- Customer Form --}}
     @if ($openForm)
         <div class="mb-6 p-6 bg-base-100 rounded-2xl shadow-lg space-y-6">
@@ -47,8 +47,8 @@
 
             {{-- File Upload & Preview --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-                <input type="file" wire:model="customer_image"
-                    class="file-input file-input-bordered w-full" accept="image/*">
+                <input type="file" wire:model="customer_image" class="file-input file-input-bordered w-full"
+                    accept="image/*">
                 @if ($customer_image)
                     <div class="flex justify-center md:justify-start mt-2 md:mt-0">
                         <img src="{{ $customer_image->temporaryUrl() }}" alt="Preview"
@@ -109,7 +109,7 @@
         <table class="table table-zebra w-full">
             <thead>
                 <tr>
-                    <th>#id</th>
+                    <th>#</th>
                     <th>Name</th>
                     <th>Customer ID</th>
                     <th>Phone</th>
@@ -124,15 +124,12 @@
                 @forelse ($customers as $customer)
                     <tr>
                         <td>{{ $customer->id }}</td>
-                        <td>
-                            <a href="{{ route('customers.emi_plans', $customer->customer_id)}}">{{ $customer->customer_name }}</a>
+                        <td class="px-4 py-3 text-sm text-blue-600 font-medium"><a
+                                href="{{ route('customers.emi_plans', $customer->customer_id) }}">{{ $customer->customer_name }}</a>
                         </td>
-                        <td>
-                            <a href="{{ route('report.print', $customer->customer_id)}}"
-                                class="text-primary hover:underline"
-                               
-                                >{{ $customer->customer_id }}</a>
-                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700"><a
+                                        href="{{ route('report.print', $customer->customer_id) }}"
+                                        class="hover:underline">{{ $customer->customer_id }}</a></td>
                         <td>
                             <a href="tel:{{ $customer->customer_phone }}" class="text-primary hover:underline">
                                 {{ $customer->customer_phone }}
@@ -148,7 +145,8 @@
                         <td>{{ $customer->location->name ?? '-' }}</td>
                         <td>
                             @if ($customer->customer_image)
-                                <img loading="lazy" src="{{ asset('storage/' . $customer->customer_image) }}" alt="Image"
+                                <img loading="lazy" src="{{ asset('storage/' . $customer->customer_image) }}"
+                                    alt="Image"
                                     class="w-14 h-14 rounded-full object-cover cursor-pointer hover:scale-110 transition-transform duration-200 shadow-sm"
                                     wire:click="openModal({{ $customer->id }})">
                             @endif
@@ -182,7 +180,8 @@
                 {{-- Header --}}
                 <div class="flex items-center justify-between px-6 py-4 bg-primary text-primary-content">
                     <h3 class="text-xl font-bold">Customer Information</h3>
-                    <button wire:click="closeModal" class="btn btn-sm btn-circle btn-ghost text-xl hover:bg-primary-focus">✕</button>
+                    <button wire:click="closeModal"
+                        class="btn btn-sm btn-circle btn-ghost text-xl hover:bg-primary-focus">✕</button>
                 </div>
 
                 {{-- Body --}}
@@ -192,34 +191,41 @@
                     <div class="md:col-span-2 space-y-4">
                         <p class="text-2xl font-semibold text-gray-800">{{ $viewCustomerData->customer_name }}</p>
                         <div class="space-y-2 text-sm md:text-base text-gray-700">
-                            <p><span class="font-semibold">Customer ID:</span> {{ $viewCustomerData->customer_id }}</p>
+                            <p><span class="font-semibold">Customer ID:</span> {{ $viewCustomerData->customer_id }}
+                            </p>
                             <p class="flex items-center gap-2">
                                 <span class="font-semibold">Phone:</span>
-                                <a href="tel:{{ $viewCustomerData->customer_phone }}" class="btn btn-xs md:btn-sm btn-outline btn-primary gap-1 hover:scale-105 transition-transform duration-200">
+                                <a href="tel:{{ $viewCustomerData->customer_phone }}"
+                                    class="btn btn-xs md:btn-sm btn-outline btn-primary gap-1 hover:scale-105 transition-transform duration-200">
                                     📞 {{ $viewCustomerData->customer_phone }}
                                 </a>
                             </p>
                             @if ($viewCustomerData->customer_phone2)
                                 <p class="flex items-center gap-2">
                                     <span class="font-semibold">Phone 2:</span>
-                                    <a href="tel:{{ $viewCustomerData->customer_phone2 }}" class="btn btn-xs md:btn-sm btn-outline btn-primary gap-1 hover:scale-105 transition-transform duration-200">
+                                    <a href="tel:{{ $viewCustomerData->customer_phone2 }}"
+                                        class="btn btn-xs md:btn-sm btn-outline btn-primary gap-1 hover:scale-105 transition-transform duration-200">
                                         📞 {{ $viewCustomerData->customer_phone2 }}
                                     </a>
                                 </p>
                             @endif
-                            <p><span class="font-semibold">Location:</span> {{ $viewCustomerData->location->name ?? '-' }}</p>
+                            <p><span class="font-semibold">Location:</span>
+                                {{ $viewCustomerData->location->name ?? '-' }}</p>
                         </div>
                     </div>
 
                     {{-- Right Image --}}
                     <div class="flex w-full justify-center md:justify-end">
                         @if ($viewCustomerData->customer_image)
-                            <div class="rounded-3xl overflow-hidden w-44 h-44 hover:shadow-xl transition-shadow duration-300">
-                                <img loading="lazy" src="{{ asset('storage/' . $viewCustomerData->customer_image) }}" alt="Customer Image"
+                            <div
+                                class="rounded-3xl overflow-hidden w-44 h-44 hover:shadow-xl transition-shadow duration-300">
+                                <img loading="lazy" src="{{ asset('storage/' . $viewCustomerData->customer_image) }}"
+                                    alt="Customer Image"
                                     class="w-full h-full rounded-full object-cover hover:scale-105 transition-transform duration-300">
                             </div>
                         @else
-                            <div class="w-56 h-56 flex items-center justify-center bg-base-200 rounded-3xl text-gray-400">
+                            <div
+                                class="w-56 h-56 flex items-center justify-center bg-base-200 rounded-3xl text-gray-400">
                                 No Image
                             </div>
                         @endif
