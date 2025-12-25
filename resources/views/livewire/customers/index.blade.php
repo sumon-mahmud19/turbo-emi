@@ -128,9 +128,9 @@
                             <a href="{{ route('customers.emi_plans', $customer->id)}}">{{ $customer->customer_name }}</a>
                         </td>
                         <td>
-                            <a href="{{ route('report.print', $customer->id)}}"
+                            <a href="{{ route('report.print', $customer->customer_id)}}"
                                 class="text-primary hover:underline"
-                                target="_blank"
+                               
                                 >{{ $customer->customer_id }}</a>
                         </td>
                         <td>
