@@ -129,7 +129,9 @@
                         </td>
                         <td>
                             <a href="{{ route('report.print', $customer->id)}}"
-                                class="text-primary hover:underline">{{ $customer->customer_id }}</a>
+                                class="text-primary hover:underline"
+                                target="_blank"
+                                >{{ $customer->customer_id }}</a>
                         </td>
                         <td>
                             <a href="tel:{{ $customer->customer_phone }}" class="text-primary hover:underline">
