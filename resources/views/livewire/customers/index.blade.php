@@ -124,11 +124,17 @@
                 @forelse ($customers as $customer)
                     <tr>
                         <td>{{ $customer->id }}</td>
-                        <td class="px-4 py-3 text-sm text-blue-600 font-medium"><a
-                                href="{{ route('customers.emi_plans', $customer->id) }}">{{ $customer->customer_name }}</a>
+                        <td class="px-4 py-3 text-sm text-blue-600 font-medium">
+                            <a target="_blank" href="{{ route('customers.emi_plans', $customer->id) }}">{{ $customer->customer_name }}
+
+                            </a>
                         </td>
-                        <td class="px-4 py-3 text-sm text-gray-700"><a href="{{ route('report.print', $customer->id) }}"
-                                class="hover:underline">{{ $customer->customer_id }}</a></td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                            <a target="_blank"
+                                href="{{ route('report.print', $customer->id) }}" class="hover:underline">
+                                {{ $customer->customer_id }}
+                            </a>
+                        </td>
                         <td>
                             <a href="tel:{{ $customer->customer_phone }}" class="text-primary hover:underline">
                                 {{ $customer->customer_phone }}
