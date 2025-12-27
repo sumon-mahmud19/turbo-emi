@@ -1,6 +1,7 @@
 <div class="container mx-auto py-4 space-y-6">
 
-    
+    <a wire:navigate href="{{ route('customers.index') }}" class="btn btn-ghost btn-sm">হোম মেনু</a>
+
     {{-- Customer Header --}}
     <h2 class="text-xl md:text-2xl font-bold text-center md:text-left">
         Customer Name: <span class="text-primary">{{ $customer->customer_name }}</span>
