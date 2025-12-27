@@ -91,7 +91,7 @@
         {{-- Export (Admin) --}}
         @role('admin')
             <button wire:click="exportExcel" wire:loading.attr="disabled" class="btn btn-success">
-                <span wire:loading>Exporting...</span>
+               
                 <span wire:loading.remove>Export Excel</span>
             </button>
         @endrole
