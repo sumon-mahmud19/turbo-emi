@@ -53,7 +53,7 @@
             $sum = $customer->purchases->sum(fn($p) => $p->net_price);
             $emiMonths = $customer->purchases->first()?->emi_plan ?? 1;
             $monthlyInstallment = round($sum / $emiMonths);
-            $minRows = 14;
+            $minRows = 12;
         @endphp
 
         {{-- ================= Table 1 ================= --}}
