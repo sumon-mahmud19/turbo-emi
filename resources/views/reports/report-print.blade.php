@@ -177,7 +177,7 @@
                     <th colspan="4">ফোন নং: {{ $customer->customer_phone }}</th>
                     <th colspan="4">কিস্তির পরিমান: {{ $monthlyInstallment }} টাকা</th>
                     <th rowspan="2">
-                        <img src="{{ asset('storage/'.$customer->customer_image }}"
+                        <img src="{{ $customer->customer_image ? asset('storage/' . $customer->customer_image) : asset($customer->customer_image) }}"
                             style="border-radius:50%; width:80px; height:80px; object-fit:cover;">
                     </th>
                 </tr>
