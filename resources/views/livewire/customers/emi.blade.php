@@ -1,5 +1,6 @@
 <div class="container mx-auto py-4 space-y-6">
 
+    
     {{-- Customer Header --}}
     <h2 class="text-xl md:text-2xl font-bold text-center md:text-left">
         Customer Name: <span class="text-primary">{{ $customer->customer_name }}</span>
