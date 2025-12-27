@@ -116,7 +116,7 @@
                     <th>Landlord</th>
                     <th>Location</th>
                     <th>Image</th>
-                    <th>Details</th>
+                    {{-- <th>Details</th> --}}
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -127,9 +127,8 @@
                         <td class="px-4 py-3 text-sm text-blue-600 font-medium"><a
                                 href="{{ route('customers.emi_plans', $customer->id) }}">{{ $customer->customer_name }}</a>
                         </td>
-                        <td class="px-4 py-3 text-sm text-gray-700"><a
-                                        href="{{ route('report.print', $customer->id) }}"
-                                        class="hover:underline">{{ $customer->customer_id }}</a></td>
+                        <td class="px-4 py-3 text-sm text-gray-700"><a href="{{ route('report.print', $customer->id) }}"
+                                class="hover:underline">{{ $customer->customer_id }}</a></td>
                         <td>
                             <a href="tel:{{ $customer->customer_phone }}" class="text-primary hover:underline">
                                 {{ $customer->customer_phone }}
@@ -144,14 +143,16 @@
                         <td>{{ $customer->landlord_name }}</td>
                         <td>{{ $customer->location->name ?? '-' }}</td>
                         <td>
+
                             @if ($customer->customer_image)
-                                <img loading="lazy" src="{{ asset('storage/' . $customer->customer_image) }}"
-                                    alt="Image"
+                                <img src="{{ $customer->customer_image ? asset('storage/' . $customer->customer_image) : asset($customer->customer_image) }}
+"
+                                    alt="{{ $customer->customer_name }}"
                                     class="w-14 h-14 rounded-full object-cover cursor-pointer hover:scale-110 transition-transform duration-200 shadow-sm"
-                                    wire:click="openModal({{ $customer->id }})">
+                                    loading="lazy" wire:click="openModal({{ $customer->id }})" />
                             @endif
                         </td>
-                        <td>{{ $customer->location_details }}</td>
+                        {{-- <td>{{ $customer->location_details }}</td> --}}
                         <td class="flex gap-1">
                             <button wire:click="edit({{ $customer->id }})" class="btn btn-xs btn-warning">Edit</button>
                             <button onclick="confirm('Are you sure?') || event.stopImmediatePropagation()"

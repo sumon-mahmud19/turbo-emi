@@ -121,6 +121,7 @@ class Index extends Component
                 'customer_image',
                 'landlord_name',
                 'location_id',
+                // 'location_details', 
                 'created_at',
             ])
             ->with([
