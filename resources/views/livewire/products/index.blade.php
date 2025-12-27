@@ -16,7 +16,7 @@
     {{-- Search & Per Page --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
         <input type="text" wire:model.live="search" placeholder="Search Product..."
-               class="input input-bordered w-full md:w-1/3">
+            class="input input-bordered w-full md:w-1/3">
 
         <select wire:model.live="perPage" class="select select-bordered w-32">
             <option value="10">10</option>
@@ -30,32 +30,70 @@
     <div class="overflow-x-auto">
         <table class="table table-zebra w-full">
             <thead>
-            <tr>
-                <th>#</th>
-                <th>Product Name</th>
-                <th class="text-right">Actions</th>
-            </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Product Name</th>
+                    <th class="text-right">Actions</th>
+                </tr>
             </thead>
             <tbody>
-            @forelse ($products as $key => $product)
-                <tr>
-                    <td>{{ $products->firstItem() + $key }}</td>
-                    <td>{{ $product->product_name }}</td>
-                    <td class="flex justify-end gap-2">
-                        <button wire:click="edit({{ $product->id }})"
-                                class="btn btn-xs btn-warning">Edit
-                        </button>
-                        <button wire:click="delete({{ $product->id }})"
+                @forelse ($products as $key => $product)
+                    <tr>
+                        <td>{{ $products->firstItem() + $key }}</td>
+                        <td>{{ $product->product_name }}</td>
+                        <td class="flex justify-end gap-2">
+                            <button wire:click="edit({{ $product->id }})" class="btn btn-xs btn-warning">Edit
+                            </button>
+                            <button wire:click="delete({{ $product->id }})"
                                 onclick="confirm('Are you sure?') || event.stopImmediatePropagation()"
                                 class="btn btn-xs btn-error">Delete
-                        </button>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="3" class="text-center text-gray-400">No products found.</td>
-                </tr>
-            @endforelse
+                            </button>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="text-center text-gray-400">No products found.</td>
+                    </tr>
+                    @endforelse@forelse ($products as $key => $product)
+                        <tr class="hover">
+                            {{-- Row Number --}}
+                            <td>{{ $products->firstItem() + $key }}</td>
+
+                            {{-- Product Name --}}
+                            <td class="font-bold text-gray-800">
+                                {{ $product->product_name }}
+                            </td>
+
+                            {{-- NEW: Product Models Column --}}
+                            <td>
+                                <div class="flex flex-wrap gap-1">
+                                    @forelse($product->models as $model)
+                                        <span class="badge badge-ghost badge-sm border-base-300">
+                                            {{ $model->model_name }}
+                                        </span>
+                                    @empty
+                                        <span class="text-gray-400 text-xs italic">No models found</span>
+                                    @endforelse
+                                </div>
+                            </td>
+
+                            {{-- Actions --}}
+                            <td class="flex justify-end gap-2">
+                                <button wire:click="edit({{ $product->id }})" class="btn btn-xs btn-warning">Edit
+                                </button>
+                                <button wire:click="delete({{ $product->id }})"
+                                    onclick="confirm('Are you sure?') || event.stopImmediatePropagation()"
+                                    class="btn btn-xs btn-error">Delete
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-gray-500">
+                                No products found matching your search.
+                            </td>
+                        </tr>
+                    @endforelse
             </tbody>
         </table>
     </div>
@@ -66,17 +104,19 @@
     </div>
 
     {{-- Modal --}}
-    @if($isOpen)
+    @if ($isOpen)
         <div class="modal modal-open">
             <div class="modal-box">
                 <h3 class="font-bold text-lg mb-4">{{ $product_id ? 'Edit Product' : 'New Product' }}</h3>
 
                 <input type="text" wire:model="product_name" placeholder="Product Name"
-                       class="input input-bordered w-full mb-2">
-                @error('product_name') <span class="text-error">{{ $message }}</span> @enderror
+                    class="input input-bordered w-full mb-2">
+                @error('product_name')
+                    <span class="text-error">{{ $message }}</span>
+                @enderror
 
                 <div class="modal-action">
-                    @if($product_id)
+                    @if ($product_id)
                         <button class="btn btn-success" wire:click="update">Update</button>
                     @else
                         <button class="btn btn-primary" wire:click="store">Save</button>

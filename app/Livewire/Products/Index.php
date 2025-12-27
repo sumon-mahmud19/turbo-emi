@@ -28,7 +28,8 @@ class Index extends Component
 
     public function render()
     {
-        $products = Product::where('product_name', 'like', "%{$this->search}%")
+        $products = Product::with('models') // This loads the relationship
+            ->where('product_name', 'like', "%{$this->search}%")
             ->orderBy('id', 'desc')
             ->paginate($this->perPage);
 
