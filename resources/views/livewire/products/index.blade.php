@@ -37,23 +37,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($products as $key => $product)
-                    <tr>
-                        <td>{{ $products->firstItem() + $key }}</td>
-                        <td>{{ $product->product_name }}</td>
-                        <td class="flex justify-end gap-2">
-                            <button wire:click="edit({{ $product->id }})" class="btn btn-xs btn-warning">Edit
-                            </button>
-                            <button wire:click="delete({{ $product->id }})"
-                                onclick="confirm('Are you sure?') || event.stopImmediatePropagation()"
-                                class="btn btn-xs btn-error">Delete
-                            </button>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="3" class="text-center text-gray-400">No products found.</td>
-                    </tr>
+               
                     @endforelse@forelse ($products as $key => $product)
                         <tr class="hover">
                             {{-- Row Number --}}
