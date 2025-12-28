@@ -102,43 +102,45 @@ class Index extends Component
     /* -------------------- RENDER -------------------- */
 
 
-public function render()
-{
-    // Cache locations for faster queries
-    $locations = Cache::remember('locations_list', 3600, function () {
-        return Location::select('id', 'name')->get();
-    });
-
-    $search = trim($this->search);
-
-    // Base query
-    $customersQuery = Customer::with('location:id,name');
-
-    // Show trashed or active customers based on toggle
-    if ($this->showDeleted) {
-        $customersQuery->onlyTrashed();
-    }
-
-    // Apply search filter
-    if (!empty($search)) {
-        $customersQuery->where(function ($query) use ($search) {
-            $query->where('customer_name', 'like', "%{$search}%")
-                  ->orWhere('customer_id', 'like', "%{$search}%")
-                  ->orWhere('customer_phone', 'like', "%{$search}%")
-                  ->orWhereHas('location', function ($q) use ($search) {
-                      $q->where('name', 'like', "%{$search}%");
-                  });
+    public function render()
+    {
+        // Cache locations for faster queries
+        $locations = Cache::remember('locations_list', 3600, function () {
+            return Location::select('id', 'name')->get();
         });
+
+        $search = trim($this->search);
+
+        // Base query
+        $customersQuery = Customer::with('location:id,name');
+
+        // Show trashed or active customers based on toggle
+        if ($this->showDeleted) {
+            $customersQuery->onlyTrashed();
+        }
+
+        // Apply search filter
+        if (!empty($search)) {
+            $customersQuery->where(function ($query) use ($search) {
+                $query->where('customer_name', 'like', "%{$search}%")
+                    ->orWhere('customer_id', 'like', "%{$search}%")
+                    ->orWhere('customer_phone', 'like', "%{$search}%")
+                    ->orWhereHas('location', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // Get paginated results with small ID first
+        $customers = $customersQuery
+            ->orderBy('customer_id', 'asc') // OR ->orderBy('id', 'asc')
+            ->paginate($this->perPage);
+
+        return view('livewire.customers.index', [
+            'customers' => $customers,
+            'locations' => $locations,
+        ]);
     }
-
-    // Get paginated results with latest first
-    $customers = $customersQuery->orderByDesc('id')->paginate($this->perPage);
-
-    return view('livewire.customers.index', [
-        'customers' => $customers,
-        'locations' => $locations,
-    ]);
-}
 
 
 
@@ -247,38 +249,38 @@ public function render()
 
     /* -------------------- DELETE -------------------- */
 
-   // Soft Delete (active customer)
-public function delete($id)
-{
-    $customer = Customer::findOrFail($id); // Only active
-    $customer->delete();
-    sweetalert()->success('Customer soft deleted successfully.');
-    $this->resetPage();
-}
-
-// Restore (only trashed customer)
-public function restore($id)
-{
-    $customer = Customer::onlyTrashed()->findOrFail($id);
-    $customer->restore();
-    sweetalert()->success('Customer restored successfully.');
-    $this->resetPage();
-}
-
-// Force Delete (only trashed customer)
-public function forceDelete($id)
-{
-    $customer = Customer::onlyTrashed()->findOrFail($id);
-
-    // Delete image from storage if exists
-    if ($customer->customer_image) {
-        Storage::disk('public')->delete($customer->customer_image);
+    // Soft Delete (active customer)
+    public function delete($id)
+    {
+        $customer = Customer::findOrFail($id); // Only active
+        $customer->delete();
+        sweetalert()->success('Customer soft deleted successfully.');
+        $this->resetPage();
     }
 
-    $customer->forceDelete();
-    sweetalert()->success('Customer permanently deleted.');
-    $this->resetPage();
-}
+    // Restore (only trashed customer)
+    public function restore($id)
+    {
+        $customer = Customer::onlyTrashed()->findOrFail($id);
+        $customer->restore();
+        sweetalert()->success('Customer restored successfully.');
+        $this->resetPage();
+    }
+
+    // Force Delete (only trashed customer)
+    public function forceDelete($id)
+    {
+        $customer = Customer::onlyTrashed()->findOrFail($id);
+
+        // Delete image from storage if exists
+        if ($customer->customer_image) {
+            Storage::disk('public')->delete($customer->customer_image);
+        }
+
+        $customer->forceDelete();
+        sweetalert()->success('Customer permanently deleted.');
+        $this->resetPage();
+    }
 
 
     public function customerEmiPlans($id)
