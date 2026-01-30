@@ -7,86 +7,125 @@
         </div>
     @endif
 
-    {{-- Customer Form --}}
-    @if ($openForm)
-        <div class="mb-6 p-6 bg-base-100 rounded-2xl shadow-lg space-y-6">
-            <h2 class="text-2xl font-bold text-gray-800">{{ $updateMode ? 'Edit Customer' : 'Add Customer' }}</h2>
 
-            {{-- Name & Customer ID --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" wire:model="customer_name" placeholder="Name"
-                       class="input input-bordered w-full @error('customer_name') input-error @enderror">
-                <input type="text" wire:model="customer_id" placeholder="Customer ID"
-                       class="input input-bordered w-full @error('customer_id') input-error @enderror">
-            </div>
 
-            {{-- Phones --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" wire:model="customer_phone" placeholder="Phone"
-                       class="input input-bordered w-full @error('customer_phone') input-error @enderror">
-                <input type="text" wire:model="customer_phone2" placeholder="Phone 2 (optional)"
-                       class="input input-bordered w-full">
-            </div>
 
-            {{-- Landlord & Location --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" wire:model="landlord_name" placeholder="Landlord Name (optional)"
-                       class="input input-bordered w-full">
-                <select wire:model="location_id" class="select select-bordered w-full">
-                    <option value="">Select Location</option>
-                    @foreach ($locations as $location)
-                        <option value="{{ $location->id }}">{{ $location->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+    {{-- Modal --}}
+    @if ($isOpen)
+        <div class="modal modal-open">
+            <div class="modal-box max-w-md rounded-2xl p-6 overflow-hidden">
+                {{-- Header --}}
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">{{ $updateMode ? 'Edit Customer' : 'Add Customer' }}
+                </h2>
 
-            {{-- Location Details --}}
-            <input type="text" wire:model="location_details" placeholder="Location Details (optional)"
-                   class="input input-bordered w-full">
-
-            {{-- File Upload & Preview --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-                <input type="file" wire:model="customer_image" class="file-input file-input-bordered w-full"
-                       accept="image/*">
-                @if ($customer_image)
-                    <div class="flex justify-center md:justify-start mt-2 md:mt-0">
-                        <img src="{{ $customer_image->temporaryUrl() }}" alt="Preview"
-                             class="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover shadow-md hover:scale-105 transition-transform duration-200">
+                <form class="space-y-4">
+                    {{-- Name & Customer ID --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <input type="text" wire:model="customer_name" placeholder="Name"
+                                class="input input-bordered w-full @error('customer_name') input-error @enderror">
+                            @error('customer_name')
+                                <span class="text-error text-xs mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div>
+                            <input type="text" wire:model="customer_id" placeholder="Customer ID"
+                                class="input input-bordered w-full @error('customer_id') input-error @enderror">
+                            @error('customer_id')
+                                <span class="text-error text-xs mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
-                @endif
-            </div>
 
-            {{-- Buttons --}}
-            <div class="flex gap-2 justify-end mt-4">
-                @if ($updateMode)
-                    <button wire:click="update" class="btn btn-primary">Update</button>
-                    <button wire:click="resetInputFields" class="btn btn-ghost">Cancel</button>
-                @else
-                    <button wire:click="store" class="btn btn-success">Add Customer</button>
-                @endif
+                    {{-- Phones --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <input type="text" wire:model="customer_phone" placeholder="Phone"
+                                class="input input-bordered w-full @error('customer_phone') input-error @enderror">
+                            @error('customer_phone')
+                                <span class="text-error text-xs mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div>
+                            <input type="text" wire:model="customer_phone2" placeholder="Phone 2 (optional)"
+                                class="input input-bordered w-full">
+                        </div>
+                    </div>
+
+                    {{-- Landlord & Location --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" wire:model="landlord_name" placeholder="Landlord Name (optional)"
+                            class="input input-bordered w-full">
+                        <div>
+                            <select wire:model="location_id"
+                                class="select select-bordered w-full @error('location_id') select-error @enderror">
+                                <option value="">Select Location</option>
+                                @foreach ($locations as $location)
+                                    <option value="{{ $location->id }}">{{ $location->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('location_id')
+                                <span class="text-error text-xs mt-1">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    {{-- Location Details --}}
+                    <input type="text" wire:model="location_details" placeholder="Location Details (optional)"
+                        class="input input-bordered w-full">
+
+                    {{-- File Upload & Preview --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                        <input type="file" wire:model="customer_image" class="file-input file-input-bordered w-full"
+                            accept="image/*">
+                        @if ($customer_image)
+                            <div class="flex justify-center md:justify-start">
+                                <img src="{{ $customer_image->temporaryUrl() }}" alt="Preview"
+                                    class="w-32 h-32 rounded-full object-cover shadow-md hover:scale-105 transition-transform duration-200">
+                            </div>
+                        @endif
+                    </div>
+                </form>
+
+                {{-- Buttons --}}
+                <div class="flex gap-2 justify-end mt-6">
+                    <button wire:click="closeModal" class="btn btn-ghost">Cancel</button>
+                    @if ($updateMode)
+                        <button wire:click="update" class="btn btn-primary">Update</button>
+                    @else
+                        <button wire:click="store" class="btn btn-success">Add Customer</button>
+                    @endif
+                </div>
             </div>
-        </div>
-    @else
-        {{-- Show Add Button --}}
-        <div class="flex justify-end mb-4">
-            <button wire:click="$set('openForm', true)" class="btn btn-success">Add New Customer</button>
+            <div class="modal-backdrop" wire:click="closeModal"></div>
         </div>
     @endif
+
+
+
 
     {{-- Search, Pagination & Export --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <input type="text" wire:model.live="search" placeholder="Search Customers..."
-               class="input input-bordered w-full md:w-80">
+            class="input input-bordered w-full md:w-80">
         <div class="text-gray-700 text-sm md:text-base">
             @if ($search)
                 <b>Search Result:</b> {{ $customers->total() }} item(s) found.
             @endif
         </div>
 
-        @role('admin')
-        <button wire:click="exportExcel" wire:loading.attr="disabled" class="btn btn-success">
-            <span wire:loading.remove>Export Excel</span>
+        <button wire:click="create" class="btn btn-primary shadow-lg shadow-primary/20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            New Customer
         </button>
+
+        @role('admin')
+            <button wire:click="exportExcel" wire:loading.attr="disabled" class="btn btn-success">
+                <span wire:loading.remove>Export Excel</span>
+            </button>
         @endrole
 
         <select wire:model.live="perPage" class="select select-bordered w-40">
@@ -107,79 +146,82 @@
     <div class="overflow-x-auto">
         <table class="table table-zebra w-full">
             <thead>
-            <tr>
-                <th>#Id</th>
-                <th>Name</th>
-                <th>Customer ID</th>
-                <th>Phone</th>
-                <th>Landlord</th>
-                <th>Location</th>
-                <th>Image</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
+                <tr>
+                    <th>#Id</th>
+                    <th>Name</th>
+                    <th>Customer ID</th>
+                    <th>Phone</th>
+                    <th>Landlord</th>
+                    <th>Location</th>
+                    <th>Image</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
             </thead>
             <tbody>
-            @forelse ($customers as $customer)
-                <tr @if($customer->trashed()) class="opacity-50" @endif>
-                    <td>{{ $customer->id }}</td>
-                    <td class="text-blue-600 font-medium">
-                        <a target="_blank" href="{{ route('customers.emi_plans', $customer->id) }}">
-                            {{ $customer->customer_name }}
-                        </a>
-                    </td>
-                    <td>
-                        <a target="_blank" href="{{ route('report.print', $customer->id) }}" class="hover:underline">
-                            {{ $customer->customer_id }}
-                        </a>
-                    </td>
-                    <td>
-                        <a href="tel:{{ $customer->customer_phone }}" class="text-primary hover:underline">
-                            {{ $customer->customer_phone }}
-                        </a>
-                        @if ($customer->customer_phone2)
-                            <br>
-                            <a href="tel:{{ $customer->customer_phone2 }}" class="text-primary hover:underline">
-                                {{ $customer->customer_phone2 }}
+                @forelse ($customers as $customer)
+                    <tr @if ($customer->trashed()) class="opacity-50" @endif>
+                        <td>{{ $customer->id }}</td>
+                        <td class="text-blue-600 font-medium">
+                            <a target="_blank" href="{{ route('customers.emi_plans', $customer->id) }}">
+                                {{ $customer->customer_name }}
                             </a>
-                        @endif
-                    </td>
-                    <td>{{ $customer->landlord_name }}</td>
-                    <td>{{ $customer->location->name ?? '-' }}</td>
-                    <td>
-                        @if ($customer->customer_image)
-                            <img src="{{ asset('storage/' . $customer->customer_image) }}"
-                                 alt="{{ $customer->customer_name }}"
-                                 class="w-14 h-14 rounded-full object-cover cursor-pointer hover:scale-110 transition-transform duration-200 shadow-sm"
-                                 loading="lazy" wire:click="openModal({{ $customer->id }})" />
-                        @endif
-                    </td>
-                    <td>
-                        @if($customer->trashed())
-                            <span class="badge badge-error">Deleted</span>
-                        @else
-                        <span class="badge badge-success">Active</span>
-                        @endif
-                    </td>
-                    <td class="flex gap-1">
-                        @if($customer->trashed())
-                            <button wire:click="restore({{ $customer->id }})" class="btn btn-xs btn-success">Restore</button>
-                            <button wire:click="forceDelete({{ $customer->id }})"
+                        </td>
+                        <td>
+                            <a target="_blank" href="{{ route('report.print', $customer->id) }}"
+                                class="hover:underline">
+                                {{ $customer->customer_id }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="tel:{{ $customer->customer_phone }}" class="text-primary hover:underline">
+                                {{ $customer->customer_phone }}
+                            </a>
+                            @if ($customer->customer_phone2)
+                                <br>
+                                <a href="tel:{{ $customer->customer_phone2 }}" class="text-primary hover:underline">
+                                    {{ $customer->customer_phone2 }}
+                                </a>
+                            @endif
+                        </td>
+                        <td>{{ $customer->landlord_name }}</td>
+                        <td>{{ $customer->location->name ?? '-' }}</td>
+                        <td>
+                            @if ($customer->customer_image)
+                                <img src="{{ asset('storage/' . $customer->customer_image) }}"
+                                    alt="{{ $customer->customer_name }}"
+                                    class="w-14 h-14 rounded-full object-cover cursor-pointer hover:scale-110 transition-transform duration-200 shadow-sm"
+                                    loading="lazy" wire:click="openModal({{ $customer->id }})" />
+                            @endif
+                        </td>
+                        <td>
+                            @if ($customer->trashed())
+                                <span class="badge badge-error">Deleted</span>
+                            @else
+                                <span class="badge badge-success">Active</span>
+                            @endif
+                        </td>
+                        <td class="flex gap-1">
+                            @if ($customer->trashed())
+                                <button wire:click="restore({{ $customer->id }})"
+                                    class="btn btn-xs btn-success">Restore</button>
+                                <button wire:click="forceDelete({{ $customer->id }})"
                                     onclick="confirm('Permanently delete?') || event.stopImmediatePropagation()"
                                     class="btn btn-xs btn-error">Delete Permanently</button>
-                        @else
-                            <button wire:click="edit({{ $customer->id }})" class="btn btn-xs btn-warning">Edit</button>
-                            <button wire:click="delete({{ $customer->id }})"
+                            @else
+                                <button wire:click="edit({{ $customer->id }})"
+                                    class="btn btn-xs btn-warning">Edit</button>
+                                <button wire:click="delete({{ $customer->id }})"
                                     onclick="confirm('Are you sure?') || event.stopImmediatePropagation()"
                                     class="btn btn-xs btn-error">Delete</button>
-                        @endif
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="9" class="text-center text-gray-400">No customers found</td>
-                </tr>
-            @endforelse
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="9" class="text-center text-gray-400">No customers found</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -197,7 +239,7 @@
                 <div class="flex items-center justify-between px-6 py-4 bg-primary text-primary-content">
                     <h3 class="text-xl font-bold">Customer Information</h3>
                     <button wire:click="closeModal"
-                            class="btn btn-sm btn-circle btn-ghost text-xl hover:bg-primary-focus">✕</button>
+                        class="btn btn-sm btn-circle btn-ghost text-xl hover:bg-primary-focus">✕</button>
                 </div>
 
                 {{-- Body --}}
@@ -206,11 +248,12 @@
                     <div class="md:col-span-2 space-y-4">
                         <p class="text-2xl font-semibold text-gray-800">{{ $viewCustomerData->customer_name }}</p>
                         <div class="space-y-2 text-sm md:text-base text-gray-700">
-                            <p><span class="font-semibold">Customer ID:</span> {{ $viewCustomerData->customer_id }}</p>
+                            <p><span class="font-semibold">Customer ID:</span> {{ $viewCustomerData->customer_id }}
+                            </p>
                             <p class="flex items-center gap-2">
                                 <span class="font-semibold">Phone:</span>
                                 <a href="tel:{{ $viewCustomerData->customer_phone }}"
-                                   class="btn btn-xs md:btn-sm btn-outline btn-primary gap-1 hover:scale-105 transition-transform duration-200">
+                                    class="btn btn-xs md:btn-sm btn-outline btn-primary gap-1 hover:scale-105 transition-transform duration-200">
                                     📞 {{ $viewCustomerData->customer_phone }}
                                 </a>
                             </p>
@@ -218,25 +261,29 @@
                                 <p class="flex items-center gap-2">
                                     <span class="font-semibold">Phone 2:</span>
                                     <a href="tel:{{ $viewCustomerData->customer_phone2 }}"
-                                       class="btn btn-xs md:btn-sm btn-outline btn-primary gap-1 hover:scale-105 transition-transform duration-200">
+                                        class="btn btn-xs md:btn-sm btn-outline btn-primary gap-1 hover:scale-105 transition-transform duration-200">
                                         📞 {{ $viewCustomerData->customer_phone2 }}
                                     </a>
                                 </p>
                             @endif
-                            <p><span class="font-semibold">Location:</span> {{ $viewCustomerData->location->name ?? '-' }}</p>
+                            <p><span class="font-semibold">Location:</span>
+                                {{ $viewCustomerData->location->name ?? '-' }}
+                            </p>
                         </div>
                     </div>
 
                     {{-- Right Image --}}
                     <div class="flex w-full justify-center md:justify-end">
                         @if ($viewCustomerData->customer_image)
-                            <div class="rounded-3xl overflow-hidden w-44 h-44 hover:shadow-xl transition-shadow duration-300">
+                            <div
+                                class="rounded-3xl overflow-hidden w-44 h-44 hover:shadow-xl transition-shadow duration-300">
                                 <img loading="lazy" src="{{ asset('storage/' . $viewCustomerData->customer_image) }}"
-                                     alt="Customer Image"
-                                     class="w-full h-full rounded-full object-cover hover:scale-105 transition-transform duration-300">
+                                    alt="Customer Image"
+                                    class="w-full h-full rounded-full object-cover hover:scale-105 transition-transform duration-300">
                             </div>
                         @else
-                            <div class="w-56 h-56 flex items-center justify-center bg-base-200 rounded-3xl text-gray-400">
+                            <div
+                                class="w-56 h-56 flex items-center justify-center bg-base-200 rounded-3xl text-gray-400">
                                 No Image
                             </div>
                         @endif

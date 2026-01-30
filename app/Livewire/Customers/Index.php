@@ -26,7 +26,9 @@ class Index extends Component
 
     protected $paginationTheme = 'tailwind';
 
-    public $openForm = false;
+    // Modal Open
+    public $isOpen = false;
+
     public $showDeleted = false;
     public $perPage = 50;
 
@@ -50,15 +52,18 @@ class Index extends Component
 
     /* -------------------- MODAL -------------------- */
 
-    public function openModal($id)
+    public function openModal($id = null)
     {
-        $this->viewCustomerData = Customer::with('location')->findOrFail($id);
-        $this->showModal = true;
+        if ($id) {
+            $this->viewCustomerData = Customer::with('location')->findOrFail($id);
+            $this->showModal = true;
+        }
     }
 
     public function closeModal()
     {
         $this->reset(['showModal', 'viewCustomerData']);
+        $this->isOpen = false;
     }
 
     /* -------------------- SEARCH -------------------- */
@@ -91,11 +96,16 @@ class Index extends Component
         $this->resetPage(); // optional, reset page when items per page changes
     }
 
+    public function create()
+    {
+        $this->resetInputFields();
+        $this->isOpen = true;
+    }
 
     public function openAddForm()
     {
         $this->resetInputFields();
-        $this->openForm = true;
+        $this->isOpen = true;
     }
 
 
@@ -162,7 +172,7 @@ class Index extends Component
             'updateMode',
         ]);
 
-        $this->openForm = false;
+        $this->isOpen = false;
     }
 
     /* -------------------- STORE -------------------- */
@@ -190,7 +200,7 @@ class Index extends Component
 
         sweetalert()->success('Customer Created Successfully.');
         $this->resetInputFields();
-        $this->openForm = false;
+        $this->isOpen = false;
     }
 
     /* -------------------- EDIT -------------------- */
@@ -209,7 +219,7 @@ class Index extends Component
         $this->location_details    = $customer->location_details;
 
         $this->updateMode = true;
-        $this->openForm = true;
+        $this->isOpen = true;
     }
 
     /* -------------------- UPDATE -------------------- */
@@ -243,7 +253,7 @@ class Index extends Component
 
         sweetalert()->success('Customer updated successfully.');
         $this->resetInputFields();
-        $this->openForm = false;
+        $this->isOpen = false;
         $this->resetPage();
     }
 
